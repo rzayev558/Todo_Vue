@@ -9,7 +9,7 @@ const todoState = ref<todoStateType>({ todo: '', invalid: false, error: '' })
 const CreateTodo = () => {
   todoState.value.invalid = false
   if (todoState.value.todo !== '') {
-    // console.log(todoState.value.todo)
+    
     emit('create-todo', todoState.value.todo)
     todoState.value.todo = ''
     return

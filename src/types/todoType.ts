@@ -3,6 +3,7 @@ export type todoType = {
     id: string
     isCompleted: boolean
     isEditing: boolean
+    index: number
 }
 export type todoStateType = {
     todo: string
