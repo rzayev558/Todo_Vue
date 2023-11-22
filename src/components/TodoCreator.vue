@@ -1,23 +1,30 @@
 <script setup lang="ts">
+import type { todoStateType } from '@/types/todoType'
 import { ref, defineEmits } from 'vue'
-
+import TodoButton from './TodoButton.vue'
 const emit = defineEmits(['create-todo'])
-type todoType = {
-  todo: string
-}
-const todo = ref<todoType>({ todo: '' })
-const allTodos = ref<todoType[]>([])
+
+const todoState = ref<todoStateType>({ todo: '', invalid: false, error: '' })
 
 const CreateTodo = () => {
-  emit('create-todo', todo.value)
+  todoState.value.invalid = false
+  if (todoState.value.todo !== '') {
+    // console.log(todoState.value.todo)
+    emit('create-todo', todoState.value.todo)
+    todoState.value.todo = ''
+    return
+  }
+  todoState.value.invalid = true
+  todoState.value.error = 'Todo value cannot be empty!'
 }
 </script>
 
 <template>
-  <div class="input-wrap">
-    <input type="text" v-model="todo.todo" />
-    <button @click="CreateTodo()">Create</button>
+  <div class="input-wrap" :class="{ 'input-err': todoState.invalid }">
+    <input type="text" v-model="todoState.todo" />
+    <TodoButton @click="CreateTodo">Add Todo</TodoButton>
   </div>
+  <p v-if="todoState.invalid" class="err-msg">{{ todoState.error }}</p>
 </template>
 
 <style lang="scss" scoped>
@@ -37,12 +44,11 @@ const CreateTodo = () => {
       outline: none;
     }
   }
-  button {
-    padding: 8px 16px;
-    border: none;
-  }
-  .ul-element {
-    margin-top: 30px;
-  }
+}
+.err-msg {
+  margin-top: 8px;
+  font-size: 17‚px;
+  text-align: center;
+  color: red;
 }
 </style>

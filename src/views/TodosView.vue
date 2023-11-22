@@ -1,20 +1,38 @@
 <script setup lang="ts">
 import TodoCreator from '@/components/TodoCreator.vue'
 import { ref } from 'vue'
-
+import { uid } from 'uid'
+import { type todoStateType, type todoType } from '../types/todoType'
+import TodoItem from '@/components/TodoItem.vue'
 const todoList = ref<todoType[]>([])
-type todoType = {
-  todo: string
-}
-const createTodo = (todo: todoType) => {
-  todoList.value.push({ todo: todo.todo })
+// const createTodo = (todo: todoType) => {
+//   console.log(todo.name)
+//   todoList.value.push({
+//     id: uid(),
+//     name: todo.name,
+//     isCompleted: false,
+//     isEditing: false
+//   })
+// }
+
+const CreateTodo = (todo: string) => {
+  console.log(todo)
+  todoList.value.push({
+    id: uid(),
+    name: todo,
+    isCompleted: false,
+    isEditing: false
+  })
 }
 </script>
 
 <template>
   <main>
     <h1>Create todo</h1>
-    <TodoCreator @create-todo="createTodo" />
+    <TodoCreator @create-todo="CreateTodo" />
+    <ul>
+      <TodoItem v-for="todo in todoList" :key="todo.id" :todo="todo" />
+    </ul>
   </main>
 </template>
 
